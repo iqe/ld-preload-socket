@@ -41,6 +41,18 @@ netcat -n -q 0 -l 5678 &
 sleep 0.5
 echo "." | LD_PRELOAD=$SO_PATH netcat -N localhost 1234
 
+echo "Testing inet6 server"
+export LD_PRELOAD_SOCKET_INET_PORT_MAP="1234:5678"
+LD_PRELOAD=$SO_PATH netcat -6 -n -q 0 -l 1234 &
+sleep 0.5
+echo "." | netcat -6 -N ::1 5678
+
+echo ""
+echo "Testing inet6 client"
+netcat -6 -n -q 0 -l 5678 &
+sleep 0.5
+echo "." | LD_PRELOAD=$SO_PATH netcat -6 -N ::1 1234
+
 echo ""
 echo "Testing unix mappings"
 

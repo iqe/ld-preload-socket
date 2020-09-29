@@ -84,7 +84,6 @@ LD_PRELOAD_SOCKET: Mapping AF_UNIX connect(/tmp/socket-a) to connect(/tmp/socket
 
 ## Limitations
 
-* No IPv6 support
 * Parsing of environment variables does not detect malformed input
 
 ## License

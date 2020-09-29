@@ -242,6 +242,20 @@ static void update_inet_socket_port(struct sockaddr_in *addr, const char *func_n
     addr->sin_port = htons(target_port);
 }
 
+static void update_inet6_socket_port(struct sockaddr_in6 *addr, const char *func_name)
+{
+    int source_port = ntohs(addr->sin6_port); // addr->sin6_port is in network byte order
+
+    int target_port = map_inet_socket_port(source_port);
+    if (target_port == source_port) // No mapping defined
+    {
+        return;
+    }
+
+    fprintf(stderr, "%s: Mapping AF_INET6 %s(%d) to %s(%d)\n", LOG_PREFIX, func_name, source_port, func_name, target_port);
+    addr->sin6_port = htons(target_port);
+}
+
 void update_socket(const struct sockaddr *addr, const char *func_name)
 {
     switch (addr->sa_family)
@@ -251,6 +265,9 @@ void update_socket(const struct sockaddr *addr, const char *func_name)
         break;
     case AF_INET:
         update_inet_socket_port((struct sockaddr_in *)addr, func_name);
+        break;
+    case AF_INET6:
+        update_inet6_socket_port((struct sockaddr_in6 *)addr, func_name);
         break;
     default:
         break;
