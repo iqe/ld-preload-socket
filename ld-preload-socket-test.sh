@@ -5,6 +5,12 @@ set -e
 SO_PATH=`pwd`/ld-preload-socket.so
 
 echo ""
+echo "Testing no mappings"
+
+LD_PRELOAD=$SO_PATH /bin/true 2>&1 | grep "LD_PRELOAD_SOCKET: 0 mappings defined for UNIX"
+LD_PRELOAD=$SO_PATH /bin/true 2>&1 | grep "LD_PRELOAD_SOCKET: 0 mappings defined for INET"
+
+echo ""
 echo "Testing empty mappings"
 export LD_PRELOAD_SOCKET_UNIX_SOCK_MAP=
 export LD_PRELOAD_SOCKET_INET_PORT_MAP=

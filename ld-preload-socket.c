@@ -68,6 +68,10 @@ static void trim(char *str)
 static void parse_unix_socket_paths()
 {
     char *env_variable = getenv(UNIX_SOCKET_PATHS_ENV_VAR);
+    if (env_variable == NULL)
+    {
+        return;
+    }
 
     char *content = malloc(strlen(env_variable) + 1);
     strcpy(content, env_variable); // strtok needs a copy because if modifies the string
